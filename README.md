@@ -47,6 +47,7 @@ We follow the paper’s idea of representing events, entities, and directly-foll
 
 ## ⚙️ Main Steps
 
+```cypher
 ### 1. Load Events
 
 LOAD CSV WITH HEADERS FROM "file:///BPI2017.csv" AS line
