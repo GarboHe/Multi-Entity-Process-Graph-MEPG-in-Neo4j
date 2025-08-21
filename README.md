@@ -1,6 +1,6 @@
 # Multi-Entity Process Graph (MEPG) in Neo4j
 
-This repository contains a reproduction of the model described in **[Multi-Dimensional Event Data in Graph Databases(https://link.springer.com/10.1007/s13740-021-00122-1)]**, using **Neo4j** as the graph database.  
+This repository contains a reproduction of the model described in **[Multi-Dimensional Event Data in Graph Databases](https://link.springer.com/10.1007/s13740-021-00122-1)**, using **Neo4j** as the graph database.  
 We follow the paper’s idea of representing events, entities, and directly-follows (DF) relations across multiple entity types.
 
 ---
