@@ -6,7 +6,7 @@ We follow the paper’s idea of representing events, entities, and directly-foll
 ---
 
 ## 🔎 Data & Preprocessing
-- Source log: `BPI2017.csv`  
+- Source log: `BPI2017.csv`  --Use ProM to transfer the data from xes. to csv.
 - Each row = one `Event` with attributes:
   - `case` (Application ID)
   - `OfferID`
@@ -48,7 +48,7 @@ We follow the paper’s idea of representing events, entities, and directly-foll
 ## ⚙️ Main Steps
 
 ### 1. Load Events
-```cypher
+
 LOAD CSV WITH HEADERS FROM "file:///BPI2017.csv" AS line
 CREATE (:Event {
   EventId: line.EventID,
@@ -67,7 +67,7 @@ CREATE (:Event {
   Resource: line.resource 
 });
 ### 2. Create Entities
-```cypher
+
 // Application
 MATCH (e:Event)
 MERGE (a:Entity:Application {id: e.Appl})
@@ -86,7 +86,7 @@ MERGE (r:Entity:Resource {id: e.Resource})
 MERGE (e)-[:CORR]->(r);
 
 ### 3. Reify Relations (e.g., AO)
-```cypher
+
 MATCH (a:Application)<-[:CORR]-(e:Event)-[:CORR]->(o:Offer)
 WITH a, o
 MERGE (ao:Entity:AO {appId:a.id, offerId:o.id, type:"AO"})
@@ -96,7 +96,7 @@ MERGE (e)-[:CORR]->(ao);
 
 
 ### 4. Directly-Follows (DF) Relations
-```cypher
+
 // Application perspective
 MATCH (a:Application)<-[:CORR]-(e:Event)
 WITH a, e ORDER BY a.id, e.Timestamp
@@ -106,7 +106,7 @@ WITH events[i] AS e1, events[i+1] AS e2, a
 MERGE (e1)-[:DF {EntityType:"Application"}]->(e2);
 
 ### 5. Event Classes & Observations
-```cypher
+
 // Resource Classes
 MATCH (e:Event)
 MERGE (c:Class:Resource {id:e.Resource, type:"Resource"})
@@ -118,7 +118,7 @@ MERGE (c:Class:Activity {id:e.Activity, type:"Activity"})
 MERGE (e)-[:OBSERVED]->(c);
 
 ### 6.Aggregated DF (DF_C)
-```cypher
+
 MATCH (e1:Event)-[df:DF]->(e2:Event),
       (e1)-[:OBSERVED]->(c1:Class),
       (e2)-[:OBSERVED]->(c2:Class)
